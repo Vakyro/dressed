@@ -1,0 +1,24 @@
+{
+  "name": "Dressed",
+  "short_name": "Dressed",
+  "description": "Make an outfit in a second",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "theme_color": "#000000",
+  "background_color": "#FFFFFF",
+  "id": "dressed",
+  "lang": "en",
+  "display_override": [
+    "window-controls-overlay",
+    "fullscreen"
+  ],
+  "dir": "auto",
+  "orientation": "any",
+  "categories": [
+    "clothes",
+    "fashon",
+    "outfit",
+    "social"
+  ]
+}
