@@ -339,7 +339,7 @@ export default function ProfilePage() {
                         </div>
                       )}
                       {outfit.shoesItem && (
-                        <div className="absolute top-20 left-1/2 transform -translate-x-1/2 z-10 w-16 h-16">
+                        <div className="absolute top-20 left-1/2 transform -translate-x-1/2 z-30 w-16 h-16">
                           <img 
                             src={outfit.shoesItem.Image || "/placeholder.svg?height=50&width=50"} 
                             alt={outfit.shoesItem.Name} 

@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/lib/supabaseClient";
 import { useUser } from "@/hooks/useUser";
+import { getRandomItem } from "@/utils/outfitUtils";
 import { Send, Heart } from "lucide-react";
-import { useSwipeable } from "react-swipeable";
 
 // Definición de la prenda (simplificada)
 interface ClothingItem {
@@ -42,6 +42,14 @@ export default function OutfitGenerator() {
     bottomId: bottomIndex === 0 ? null : bottomItems[bottomIndex]?.id,
     shoesId: shoesIndex === 0 ? null : shoesItems[shoesIndex]?.id,
   };
+
+  // Para mostrar las imágenes (si el índice es 0 se muestra el placeholder, de lo contrario la imagen)
+  const shirt = topIndex === 0 ? null : topItems[topIndex]?.Image;
+  const pants = bottomIndex === 0 ? null : bottomItems[bottomIndex]?.Image;
+  const shoes = shoesIndex === 0 ? null : shoesItems[shoesIndex]?.Image;
+
+  // Función para agregar un placeholder (los SVG no tienen imagen, se renderiza el componente)
+  // Se usarán en el render directamente.
 
   // Se carga la lista completa de prendas del usuario para cada categoría y se agrega al inicio un "placeholder"
   useEffect(() => {
@@ -249,52 +257,6 @@ export default function OutfitGenerator() {
     }
   };
 
-  // Swipe handlers para cada sección
-  const topSwipeHandlers = useSwipeable({
-    onSwipedLeft: () => {
-      if (topItems.length > 0) {
-        setTopIndex((prev) => (prev + 1) % topItems.length);
-      }
-    },
-    onSwipedRight: () => {
-      if (topItems.length > 0) {
-        setTopIndex((prev) => (prev - 1 + topItems.length) % topItems.length);
-      }
-    },
-    preventDefaultTouchmoveEvent: true,
-    trackMouse: true,
-  });
-
-  const bottomSwipeHandlers = useSwipeable({
-    onSwipedLeft: () => {
-      if (bottomItems.length > 0) {
-        setBottomIndex((prev) => (prev + 1) % bottomItems.length);
-      }
-    },
-    onSwipedRight: () => {
-      if (bottomItems.length > 0) {
-        setBottomIndex((prev) => (prev - 1 + bottomItems.length) % bottomItems.length);
-      }
-    },
-    preventDefaultTouchmoveEvent: true,
-    trackMouse: true,
-  });
-
-  const shoesSwipeHandlers = useSwipeable({
-    onSwipedLeft: () => {
-      if (shoesItems.length > 0) {
-        setShoesIndex((prev) => (prev + 1) % shoesItems.length);
-      }
-    },
-    onSwipedRight: () => {
-      if (shoesItems.length > 0) {
-        setShoesIndex((prev) => (prev - 1 + shoesItems.length) % shoesItems.length);
-      }
-    },
-    preventDefaultTouchmoveEvent: true,
-    trackMouse: true,
-  });
-
   // Los SVG placeholders originales
   const TopPlaceholder = () => (
     <svg
@@ -392,11 +354,20 @@ export default function OutfitGenerator() {
       <SideMenu />
       <h1 className="text-2xl font-bold mt-4">AI Outfit Generator</h1>
       <div className="flex flex-col items-center space-y-8 w-full max-w-xs">
-        {/* Sección de carruseles (Top, Bottom, Shoes) */}
+        {/* Sección de carruseles (Top, Bottom, Shoes) con el diseño original */}
         <div className="flex flex-col items-center space-y-8 w-full">
-          {/* Top Carousel */}
+          {/* Top */}
           <div className="flex flex-col items-center relative">
-            <div {...topSwipeHandlers} className="flex flex-col items-center">
+            <button
+              onClick={() => {
+                if (topItems.length > 0)
+                  setTopIndex((prev) => (prev - 1 + topItems.length) % topItems.length);
+              }}
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow p-1 z-10"
+            >
+              {"<"}
+            </button>
+            <div className="flex flex-col items-center">
               {topIndex === 0 ? (
                 <TopPlaceholder />
               ) : (
@@ -407,10 +378,28 @@ export default function OutfitGenerator() {
                 />
               )}
             </div>
+            <button
+              onClick={() => {
+                if (topItems.length > 0)
+                  setTopIndex((prev) => (prev + 1) % topItems.length);
+              }}
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow p-1 z-10"
+            >
+              {">"}
+            </button>
           </div>
-          {/* Bottom Carousel */}
+          {/* Bottom */}
           <div className="flex flex-col items-center relative">
-            <div {...bottomSwipeHandlers} className="flex flex-col items-center">
+            <button
+              onClick={() => {
+                if (bottomItems.length > 0)
+                  setBottomIndex((prev) => (prev - 1 + bottomItems.length) % bottomItems.length);
+              }}
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow p-1 z-10"
+            >
+              {"<"}
+            </button>
+            <div className="flex flex-col items-center">
               {bottomIndex === 0 ? (
                 <BottomPlaceholder />
               ) : (
@@ -421,10 +410,28 @@ export default function OutfitGenerator() {
                 />
               )}
             </div>
+            <button
+              onClick={() => {
+                if (bottomItems.length > 0)
+                  setBottomIndex((prev) => (prev + 1) % bottomItems.length);
+              }}
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow p-1 z-10"
+            >
+              {">"}
+            </button>
           </div>
-          {/* Shoes Carousel */}
+          {/* Shoes */}
           <div className="flex flex-col items-center relative">
-            <div {...shoesSwipeHandlers} className="flex flex-col items-center">
+            <button
+              onClick={() => {
+                if (shoesItems.length > 0)
+                  setShoesIndex((prev) => (prev - 1 + shoesItems.length) % shoesItems.length);
+              }}
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow p-1 z-10"
+            >
+              {"<"}
+            </button>
+            <div className="flex flex-col items-center">
               {shoesIndex === 0 ? (
                 <ShoesPlaceholder />
               ) : (
@@ -435,6 +442,15 @@ export default function OutfitGenerator() {
                 />
               )}
             </div>
+            <button
+              onClick={() => {
+                if (shoesItems.length > 0)
+                  setShoesIndex((prev) => (prev + 1) % shoesItems.length);
+              }}
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white rounded-full shadow p-1 z-10"
+            >
+              {">"}
+            </button>
           </div>
         </div>
         {/* Formulario para generar outfit con AI */}
@@ -461,7 +477,7 @@ export default function OutfitGenerator() {
           className="rounded-full w-12 h-12 p-0"
           disabled={loading}
         >
-          {/* SVG de dado */}
+          {/* SVG de dado (copiado del original) */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="128"
